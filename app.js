@@ -25,3 +25,5 @@ initialDiv = Math.floor(Math.random()*10)
 randomType = Math.floor(Math.random()*6)
 constructBlock(initialDiv, randomType)
 
+console.log('check')
+
