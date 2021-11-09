@@ -2,6 +2,7 @@ const allDivs = document.querySelectorAll(".pixel");
 const rotateButton = document.getElementById("rotateButton")
 const downButton  =  document.getElementById("downButton")
 
+//map for roatation
 const rotateMap = new Map();
 // -11 will become -9
 rotateMap.set(-11,-9)
