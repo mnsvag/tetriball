@@ -75,8 +75,12 @@ class Block {
     }
 }
 
-function constructBlock(center, type) {
-   let newBlock = new Block(center, type,color)
+function constructBlock() {
+    //center = Math.floor(Math.random()*8 + 1)
+    center=14
+    type = Math.floor(Math.random()*7)
+    color = "red"
+    let newBlock = new Block(center, type,color)
     newBlock.blockArray.forEach(element => {
         allDivs[center+element].style.backgroundColor = color;
     });
@@ -93,13 +97,8 @@ var block;
 
 function blockJourney() {
     //1. bring new block
-    //constructBlock()
-    //initialDiv = Math.floor(Math.random()*8 + 1)
-    randomType = Math.floor(Math.random()*7)
-    color = "red"
-    block = constructBlock(14, randomType,color)
+    block = constructBlock()
     
-    //console.log(block.currentRotation)
 
     //2. move the block down
     //setInterval(moveDown, 50)
