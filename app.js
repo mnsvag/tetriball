@@ -13,11 +13,21 @@ class Block {
     }
 }
 
+function getRandomColor() {
+    var letters = '0123456789ABCDEF';
+    var color = '#';
+    for (var i = 0; i < 6; i++) {
+      color += letters[Math.floor(Math.random() * 16)];
+    }
+    return color;
+  }
+
 function constructBlock(center, type) {
     let newBlock = new Block(center, type)
+    color = getRandomColor();
     blockTypes[type.toString()].forEach(element => {
         console.log(element);
-        allDivs[center+element].style.backgroundColor="yellow";
+        allDivs[center+element].style.backgroundColor = color;
     });
 }
 
