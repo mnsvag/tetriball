@@ -1,0 +1,14 @@
+.pixel {
+	width: 20x;
+	height: 20px;
+	border-style: solid;
+	border-color: black;
+    padding: 10px;
+}
+
+.grid {
+	display: grid;
+    grid-template-columns: auto auto auto auto auto auto auto auto auto auto;
+	width: 400px;
+	height: 400px;
+}
