@@ -1,5 +1,6 @@
 const allDivs = document.querySelectorAll(".pixel");
 const rotateButton = document.getElementById("rotateButton")
+const downButton  =  document.getElementById("downButton")
 
 const rotateMap = new Map();
 // -11 will become -9
@@ -22,9 +23,10 @@ const blockTypes = {0: [-1, +9, +10, +11],
                     6: [-1, 0, +9, +10]
                 };
 class Block {
-    constructor(center, type) {
+    constructor(center, type,color) {
         this.center = center
         this.type=type;
+        this.color = color;
         this.blockArray = blockTypes[type.toString()]
     }
 
@@ -39,6 +41,19 @@ class Block {
     }
 
     moveDown() {
+        this.blockArray.forEach(ele => {
+            allDivs[this.center+ele].style.backgroundColor="white"
+        })
+
+        console.log(this.center);
+        this.center += 10;
+        console.log(this.center);
+        
+
+        this.blockArray.forEach(ele => {
+            allDivs[this.center+ele].style.backgroundColor=this.color
+        })
+
 
     }
 
@@ -52,7 +67,7 @@ class Block {
         })
 
         this.blockArray.forEach(ele => {
-            allDivs[this.center+ele].style.backgroundColor="pink"
+            allDivs[this.center+ele].style.backgroundColor=this.color
         })
 
 
@@ -60,9 +75,9 @@ class Block {
 }
 
 function constructBlock(center, type) {
-   let newBlock = new Block(center, type)
+   let newBlock = new Block(center, type,color)
     newBlock.blockArray.forEach(element => {
-        allDivs[center+element].style.backgroundColor = "green";
+        allDivs[center+element].style.backgroundColor = color;
     });
 
     return newBlock;
@@ -80,7 +95,9 @@ function blockJourney() {
     //constructBlock()
     //initialDiv = Math.floor(Math.random()*8 + 1)
     randomType = Math.floor(Math.random()*7)
-    block = constructBlock(14, randomType)
+    color = "red"
+    block = constructBlock(14, randomType,color)
+    
     //console.log(block.currentRotation)
 
     //2. move the block down
@@ -98,7 +115,9 @@ function blockJourney() {
    rotateButton.addEventListener("click", ()=>{
        block.rotate();
    });
-
+   downButton.addEventListener("click", ()=>{
+        block.moveDown();
+    });
 }
 
 blockJourney();
