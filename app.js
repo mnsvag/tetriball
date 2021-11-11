@@ -1,31 +1,48 @@
-const allDivs = document.querySelectorAll(".pixel");
+const allDivs = document.querySelectorAll("div");
 const rotateButton = document.getElementById("rotateButton")
 const downButton  =  document.getElementById("downButton")
 const leftButton  =  document.getElementById("leftButton")
 const rightButton  =  document.getElementById("rightButton")
-
+// allDivs[144].style.backgroundColor = "red";
+// allDivs[104].style.backgroundColor = "red";
+//console.log(allDivs[100].style.getBackgroundColor)
 
 //map for roatation
 const rotateMap = new Map();
-// -11 will become -9
-rotateMap.set(-11,-9)
-rotateMap.set(-10,1)
-rotateMap.set(-9,11)
-rotateMap.set(-1,-10)
+rotateMap.set(-13,-11)
+rotateMap.set(-12,1)
+rotateMap.set(-11,13)
+rotateMap.set(-1,-12)
 rotateMap.set(0,0)
-rotateMap.set(1,10)
-rotateMap.set(9,-11)
-rotateMap.set(10,-1)
-rotateMap.set(11,9)
+rotateMap.set(1,12)
+rotateMap.set(11,-13)
+rotateMap.set(12,-1)
+rotateMap.set(13,11)
 
-const blockTypes = {0: [-1, +9, +10, +11],
-                    1: [+1, +9, +10, +11],
-                    2: [0, +1, +9, +10],
-                    3: [0, +9, +10, +11],
-                    4: [-1, 0, +10, +11],
+// const bottomMost = [11, 12, 13]
+// const leftMost = [-13, -1, 11]
+// const rightMost = [-11, 1, 13]
+
+const matrix = [[-13, -12, -11],
+                [-1, 0, +1],
+                [+11, +12, +13]];
+
+var lastRow;
+var col=0;
+var row=0;
+for(var row=2; row>=0; row--) {
+    
+}
+
+const blockTypes = {0: [-1, +11, +12, +13],
+                    1: [+1, +11, +12, +13],
+                    2: [0, +1, +11, +12],
+                    3: [0, +11, +12, +13],
+                    4: [-1, 0, +12, +13],
                     5: [-1, 0, +1],
-                    6: [-1, 0, +9, +10]
+                    6: [-1, 0, +11, +12]
                 };
+
 class Block {
     constructor(center, type,color) {
         this.center = center
@@ -43,9 +60,20 @@ class Block {
         // console.log(this.blockArray)
 
         //checks if bottom is touching some div, if yes, updates isActive, else clear interval for checking UpdateIsActive
-        this.blockArray.forEach( ele => {
-            if(allDivs[this.center+ele + 10].style.backgroundColor != "white");
-                //this.isActive = false;
+       
+        // this.blockArray.forEach( ele => {
+        //     if(allDivs[this.center+ele + 10].style.backgroundColor != "white");
+        //        // this.isActive = false;
+        // })
+
+        bottomMost.forEach(ele => {
+            
+            if(this.blockArray.includes(ele) && 
+                ((allDivs[this.center+ele+12].classList.contains("border")) ||
+                     allDivs[this.center+ele+10].style.backgroundColor=="red")) {
+                console.log("check", ele)
+                this.isActive=false;
+            }
         })
 
         if(this.isActive==false){
@@ -64,6 +92,13 @@ class Block {
     }
 
     moveLeft() {
+        // // this.blockArray.forEach(ele => {
+        //     if it contains left element then check if it is border
+        // //     if(leftMost.includes(ele) && allDivs[center+ele]) {
+
+        // //     }
+        //     else move
+        // // })
         
     }
 
@@ -76,7 +111,7 @@ class Block {
             allDivs[this.center+ele].style.backgroundColor="white"
         })
 
-        this.center += 10;
+        this.center += 12;
         
 
         this.blockArray.forEach(ele => {
@@ -105,7 +140,7 @@ class Block {
 
 function constructBlock() {
     //center = Math.floor(Math.random()*8 + 1)
-    center=14
+    center=17
     type = Math.floor(Math.random()*7)
     color = "red"
     let newBlock = new Block(center, type,color)
@@ -140,6 +175,23 @@ function blockJourney() {
 
     block.intervalOfIsActive   = setInterval(function() {block.updateIsActive()}, 10);
     block.intervalOfMovingDown = setInterval(function() {block.checkAndMoveDown()}, 1000);
+
+    document.addEventListener('keydown', (event) => {
+        
+        const keyName = event.key;
+        if(keyName==' '){
+            //user pressed spacebar
+            block.rotate();
+        }
+        if(keyName == 'arrowLeft'){
+            block.moveLeft();
+        }
+        if(keyName == 'arrowRight'){
+            block.moveRight();
+        }
+        //alert(keyName);
+        
+    });
 
     // while(block.isActive){
 
