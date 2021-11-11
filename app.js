@@ -27,12 +27,7 @@ const matrix = [[-13, -12, -11],
                 [-1, 0, +1],
                 [+11, +12, +13]];
 
-var lastRow;
-var col=0;
-var row=0;
-for(var row=2; row>=0; row--) {
-    
-}
+
 
 const blockTypes = {0: [-1, +11, +12, +13],
                     1: [+1, +11, +12, +13],
@@ -42,6 +37,15 @@ const blockTypes = {0: [-1, +11, +12, +13],
                     5: [-1, 0, +1],
                     6: [-1, 0, +11, +12]
                 };
+
+function isPartOfBorder(index){
+    if(allDivs[index].classList.contains('border')) return true;
+    else return false;
+}
+function isFilled(index){
+    if(allDivs[index].style.backgroundColor != 'white') return true;
+    else return false;
+}
 
 class Block {
     constructor(center, type,color) {
@@ -66,19 +70,19 @@ class Block {
         //        // this.isActive = false;
         // })
 
-        bottomMost.forEach(ele => {
+        // bottomMost.forEach(ele => {
             
-            if(this.blockArray.includes(ele) && 
-                ((allDivs[this.center+ele+12].classList.contains("border")) ||
-                     allDivs[this.center+ele+10].style.backgroundColor=="red")) {
-                console.log("check", ele)
-                this.isActive=false;
-            }
-        })
+        //     if(this.blockArray.includes(ele) && 
+        //         ((allDivs[this.center+ele+12].classList.contains("border")) ||
+        //              allDivs[this.center+ele+10].style.backgroundColor=="red")) {
+        //         console.log("check", ele)
+        //         this.isActive=false;
+        //     }
+        // })
 
-        if(this.isActive==false){
-            clearInterval(this.intervalOfIsActive);
-        }
+        // if(this.isActive==false){
+        //     clearInterval(this.intervalOfIsActive);
+        // }
     }
 
     checkAndMoveDown(){
@@ -99,6 +103,42 @@ class Block {
         // //     }
         //     else move
         // // })
+
+        let myLeftMostCol;
+        for(let col=0;col<=2;col++){
+            let found=false;
+            for(let row=0;row<=3;row++){
+                if(this.blockArray.includes(matrix[row][col])){
+                    found=true;
+                    break;
+                }
+            }
+            if(found){
+                myLeftMostCol=col;
+                break;
+            }
+        }
+        console.log(`my leftmost col is ${myLeftMostCol}`);
+        //if leftmost col is border or has some filled div dont move, else move
+        matrix[myLeftMostCol].forEach( index => {
+            let leftToLeftMostCol = this.center + index - 1;
+            if(isPartOfBorder(leftToLeftMostCol) || isFilled(leftToLeftMostCol)) return;
+        }) 
+
+
+        this.blockArray.forEach(ele => {
+            allDivs[this.center+ele].style.backgroundColor="white"
+        })
+
+        this.center -= 1;
+        
+
+        this.blockArray.forEach(ele => {
+            allDivs[this.center+ele].style.backgroundColor=this.color
+        })
+
+
+
         
     }
 
@@ -183,13 +223,14 @@ function blockJourney() {
             //user pressed spacebar
             block.rotate();
         }
-        if(keyName == 'arrowLeft'){
+        else if(keyName == 'ArrowLeft'){
+            console.log('rewwww');
             block.moveLeft();
         }
-        if(keyName == 'arrowRight'){
+        else if(keyName == 'ArrowRight'){
             block.moveRight();
         }
-        //alert(keyName);
+        
         
     });
 
