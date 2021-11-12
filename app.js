@@ -39,10 +39,11 @@ const blockTypes = {0: [-1, +11, +12, +13],
                 };
 
 function isPartOfBorder(index){
-    if(allDivs[index].classList.contains('border')) return true;
+    if(allDivs[index].classList.contains('border')) {return true;}
     else return false;
 }
 function isFilled(index){
+    return false;
     if(allDivs[index].style.backgroundColor != 'white') return true;
     else return false;
 }
@@ -118,12 +119,15 @@ class Block {
                 break;
             }
         }
-        console.log(`my leftmost col is ${myLeftMostCol}`);
+        //console.log(`my center is ${this.center}`);
+        //console.log(`my leftmost col is ${myLeftMostCol}`);
+        
         //if leftmost col is border or has some filled div dont move, else move
-        matrix[myLeftMostCol].forEach( index => {
+        for(let row=0; row <= 2 ; row++){
+            let index = matrix[row][myLeftMostCol];
             let leftToLeftMostCol = this.center + index - 1;
             if(isPartOfBorder(leftToLeftMostCol) || isFilled(leftToLeftMostCol)) return;
-        }) 
+        }
 
 
         this.blockArray.forEach(ele => {
@@ -143,10 +147,70 @@ class Block {
     }
 
     moveRight() {
+        let myRightMostCol;
+        for(let col=2;col >= 0;col--){
+            let found=false;
+            for(let row=0; row <= 2; row++){
+                if(this.blockArray.includes(matrix[row][col])){
+                    found=true;
+                    break;
+                }
+            }
+            if(found){
+                myRightMostCol=col;
+                break;
+            }
+        }
+        //console.log(`my center is ${this.center}`);
+        //console.log(`my leftmost col is ${myLeftMostCol}`);
+        
+        //if leftmost col is border or has some filled div dont move, else move
+        for(let row=0; row <= 2 ; row++){
+            let index = matrix[row][myRightMostCol];
+            let rightToRightMostCol = this.center + index + 1;
+            if(isPartOfBorder(rightToRightMostCol) || isFilled(rightToRightMostCol)) return;
+        }
+
+
+        this.blockArray.forEach(ele => {
+            allDivs[this.center+ele].style.backgroundColor="white"
+        })
+
+        this.center += 1;
+        
+
+        this.blockArray.forEach(ele => {
+            allDivs[this.center+ele].style.backgroundColor=this.color
+        })
 
     }
 
     moveDown() {
+
+        let myDownMostRow;
+        for(let row=2;row >= 0;row--){
+            let found=false;
+            for(let col=0; col <= 2; col++){
+                if(this.blockArray.includes(matrix[row][col])){
+                    found=true;
+                    break;
+                }
+            }
+            if(found){
+                myDownMostRow=row;
+                break;
+            }
+        }
+        //console.log(`my center is ${this.center}`);
+        //console.log(`my leftmost col is ${myLeftMostCol}`);
+        
+        //if leftmost col is border or has some filled div dont move, else move
+        for(let col=0; col <= 2 ; col++){
+            let index = matrix[myDownMostRow][col];
+            let downToDownMostCol = this.center + index + 12;
+            if(isPartOfBorder(downToDownMostCol) || isFilled(downToDownMostCol)) return;
+        }
+
         this.blockArray.forEach(ele => {
             allDivs[this.center+ele].style.backgroundColor="white"
         })
@@ -224,7 +288,6 @@ function blockJourney() {
             block.rotate();
         }
         else if(keyName == 'ArrowLeft'){
-            console.log('rewwww');
             block.moveLeft();
         }
         else if(keyName == 'ArrowRight'){
