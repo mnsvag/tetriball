@@ -3,6 +3,7 @@ const rotateButton = document.getElementById("rotateButton")
 const downButton  =  document.getElementById("downButton")
 const leftButton  =  document.getElementById("leftButton")
 const rightButton  =  document.getElementById("rightButton")
+var newBlockFlag=true
 // allDivs[144].style.backgroundColor = "red";
 // allDivs[104].style.backgroundColor = "red";
 //console.log(allDivs[100].style.getBackgroundColor)
@@ -19,15 +20,9 @@ rotateMap.set(11,-13)
 rotateMap.set(12,-1)
 rotateMap.set(13,11)
 
-// const bottomMost = [11, 12, 13]
-// const leftMost = [-13, -1, 11]
-// const rightMost = [-11, 1, 13]
-
 const matrix = [[-13, -12, -11],
                 [-1, 0, +1],
                 [+11, +12, +13]];
-
-
 
 const blockTypes = {0: [-1, +11, +12, +13],
                     1: [+1, +11, +12, +13],
@@ -43,8 +38,8 @@ function isPartOfBorder(index){
     else return false;
 }
 function isFilled(index){
-    return false;
-    if(allDivs[index].style.backgroundColor != 'white') return true;
+    //return false;
+    if(allDivs[index].classList.contains("block")) return true;
     else return false;
 }
 
@@ -54,57 +49,49 @@ class Block {
         this.type=type;
         this.color = color;
         this.blockArray = blockTypes[type.toString()]
-        this.isActive= true;
+        //this.isActive= true;
         this.intervalOfMovingDown = null;
-        this.intervalOfIsActive =  null;
+        //this.intervalOfIsActive =  null;
     }
 
-    updateIsActive(){
-        // console.log("i am in update is active")
-        // console.log(this)
-        // console.log(this.blockArray)
+    // updateIsActive(){
+    //     console.log("i am in update is active")
+    //     console.log(this)
+    //     console.log(this.blockArray)
 
-        //checks if bottom is touching some div, if yes, updates isActive, else clear interval for checking UpdateIsActive
+    //     checks if bottom is touching some div, if yes, updates isActive, else clear interval for checking UpdateIsActive
        
-        // this.blockArray.forEach( ele => {
-        //     if(allDivs[this.center+ele + 10].style.backgroundColor != "white");
-        //        // this.isActive = false;
-        // })
+    //     this.blockArray.forEach( ele => {
+    //         if(allDivs[this.center+ele + 10].style.backgroundColor != "white");
+    //            // this.isActive = false;
+    //     })
 
-        // bottomMost.forEach(ele => {
+    //     bottomMost.forEach(ele => {
             
-        //     if(this.blockArray.includes(ele) && 
-        //         ((allDivs[this.center+ele+12].classList.contains("border")) ||
-        //              allDivs[this.center+ele+10].style.backgroundColor=="red")) {
-        //         console.log("check", ele)
-        //         this.isActive=false;
-        //     }
-        // })
+    //         if(this.blockArray.includes(ele) && 
+    //             ((allDivs[this.center+ele+12].classList.contains("border")) ||
+    //                  allDivs[this.center+ele+10].style.backgroundColor=="red")) {
+    //             console.log("check", ele)
+    //             this.isActive=false;
+    //         }
+    //     })
 
-        // if(this.isActive==false){
-        //     clearInterval(this.intervalOfIsActive);
-        // }
-    }
+    //     if(this.isActive==false){
+    //         clearInterval(this.intervalOfIsActive);
+    //     }
+    // }
 
-    checkAndMoveDown(){
-        //if isActive is true, go down else clear Interval for going down
-        if(this.isActive==true){
-            this.moveDown();
-        }
-        else
-            clearInterval(this.intervalOfMovingDown);
+    // checkAndMoveDown(){
+    //     //if isActive is true, go down else clear Interval for going down
+    //     if(this.isActive==true){
+    //         this.moveDown();
+    //     }
+    //     else
+    //         clearInterval(this.intervalOfMovingDown);
 
-    }
+    // }
 
     moveLeft() {
-        // // this.blockArray.forEach(ele => {
-        //     if it contains left element then check if it is border
-        // //     if(leftMost.includes(ele) && allDivs[center+ele]) {
-
-        // //     }
-        //     else move
-        // // })
-
         let myLeftMostCol;
         for(let col=0;col<=2;col++){
             let found=false;
@@ -125,25 +112,23 @@ class Block {
         //if leftmost col is border or has some filled div dont move, else move
         for(let row=0; row <= 2 ; row++){
             let index = matrix[row][myLeftMostCol];
+            if(!this.blockArray.includes(index)) continue
             let leftToLeftMostCol = this.center + index - 1;
             if(isPartOfBorder(leftToLeftMostCol) || isFilled(leftToLeftMostCol)) return;
         }
 
 
         this.blockArray.forEach(ele => {
-            allDivs[this.center+ele].style.backgroundColor="white"
+            allDivs[this.center+ele].classList.remove("block")
         })
 
+        console.log(this.center, this.type)
         this.center -= 1;
-        
+        console.log(this.center, this.type)
 
         this.blockArray.forEach(ele => {
-            allDivs[this.center+ele].style.backgroundColor=this.color
+            allDivs[this.center+ele].classList.add("block")
         })
-
-
-
-        
     }
 
     moveRight() {
@@ -167,20 +152,23 @@ class Block {
         //if leftmost col is border or has some filled div dont move, else move
         for(let row=0; row <= 2 ; row++){
             let index = matrix[row][myRightMostCol];
+            if(!this.blockArray.includes(index)) continue
             let rightToRightMostCol = this.center + index + 1;
             if(isPartOfBorder(rightToRightMostCol) || isFilled(rightToRightMostCol)) return;
         }
 
 
         this.blockArray.forEach(ele => {
-            allDivs[this.center+ele].style.backgroundColor="white"
+            allDivs[this.center+ele].classList.remove("block")
         })
 
+        console.log(this.center, this.type)
         this.center += 1;
+        console.log(this.center, this.type)
         
 
         this.blockArray.forEach(ele => {
-            allDivs[this.center+ele].style.backgroundColor=this.color
+            allDivs[this.center+ele].classList.add("block")
         })
 
     }
@@ -207,19 +195,24 @@ class Block {
         //if leftmost col is border or has some filled div dont move, else move
         for(let col=0; col <= 2 ; col++){
             let index = matrix[myDownMostRow][col];
+            if(!this.blockArray.includes(index)) continue
             let downToDownMostCol = this.center + index + 12;
-            if(isPartOfBorder(downToDownMostCol) || isFilled(downToDownMostCol)) return;
+            if(isPartOfBorder(downToDownMostCol) || isFilled(downToDownMostCol)) {
+                newBlockFlag=true
+                clearInterval(this.intervalOfMovingDown)
+                return
+            }
         }
 
         this.blockArray.forEach(ele => {
-            allDivs[this.center+ele].style.backgroundColor="white"
+            allDivs[this.center+ele].classList.remove("block")
         })
 
         this.center += 12;
         
 
         this.blockArray.forEach(ele => {
-            allDivs[this.center+ele].style.backgroundColor=this.color
+            allDivs[this.center+ele].classList.add("block")
         })
 
 
@@ -227,7 +220,7 @@ class Block {
 
     rotate() {
        this.blockArray.forEach(ele => {
-           allDivs[this.center+ele].style.backgroundColor="white"
+           allDivs[this.center+ele].classList.remove("block")
        })
 
         this.blockArray = this.blockArray.map(ele =>{
@@ -235,7 +228,7 @@ class Block {
         })
 
         this.blockArray.forEach(ele => {
-            allDivs[this.center+ele].style.backgroundColor=this.color
+            allDivs[this.center+ele].classList.add("block")
         })
 
 
@@ -249,20 +242,15 @@ function constructBlock() {
     color = "red"
     let newBlock = new Block(center, type,color)
     newBlock.blockArray.forEach(element => {
-        allDivs[center+element].style.backgroundColor = color;
+        allDivs[center+element].classList.add("block");
     });
 
     return newBlock;
 }
 
-
-
-
 //onLoad 
 
 var block;
-// var intervalOfMovingDown;
-// var intervalOfIsActive;
 
 function blockJourney() {
 
@@ -277,8 +265,8 @@ function blockJourney() {
     //1. bring new block
     block = constructBlock()
 
-    block.intervalOfIsActive   = setInterval(function() {block.updateIsActive()}, 10);
-    block.intervalOfMovingDown = setInterval(function() {block.checkAndMoveDown()}, 1000);
+    //block.intervalOfIsActive   = setInterval(function() {block.move}, 10);
+    block.intervalOfMovingDown = setInterval(function() {block.moveDown()}, 1000);
 
     document.addEventListener('keydown', (event) => {
         
@@ -296,34 +284,16 @@ function blockJourney() {
         
         
     });
-
-    // while(block.isActive){
-
-        
-    // }
-    
-    
-
-    //2. move the block down
-    //setInterval(moveDown, 50)
-
-    //while the block does not hit bottom or another block -->
-        
-        //2. move left and right according to press
-        //onPress()
-
-        //3. once it hits, block unactive
-
-    //bottommost or another block stop movement and call new blockJourney
-
-//    rotateButton.addEventListener("click", ()=>{
-//        block.rotate();
-//    });
-//    downButton.addEventListener("click", ()=>{
-//         block.moveDown();
-//     });
 }
 
-blockJourney();
+//blockJourney();
+
+setInterval(()=> {
+    console.log("checking")
+    if(newBlockFlag) {
+        newBlockFlag=false
+        blockJourney()
+    }
+}, 1000)
 
 
