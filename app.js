@@ -326,12 +326,11 @@ blockjourney(){
     setInterval(updateIsActive,100ms); //this will keep updating if the block is active
     setInterval( checkAndMoveDown, 1 second); //this will keep checking if the block is active and then move down every second
     
-    boolean eventListenerAdded=false;
+    document.addEventListener() ("keypress",keyBoard(block))
     while block.isActive{
-        eventListenerAdded=true;
-        document.addEventListener() ("keypress",keyBoard(block))
+       ;
     }
-    if(eventListenerAdded) document.removeEventListner()
+    document.removeEventListner()
 }
 
 while(game continues){
