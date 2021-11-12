@@ -297,3 +297,45 @@ setInterval(()=> {
 }, 1000)
 
 
+/*
+
+Code/game structure
+checkAndMoveDown(){
+     if(block is currently active && can go down){
+         moveDown();
+     }
+     else clearInterval(checkAndMoveDown)
+}
+
+updateIsActive(){
+    checkIf touching down
+    else
+        clearInterval(updateIsActive)
+}
+
+function keyBoard(block){
+    if user presses left go left ==> block.moveLeft()
+    if user presses right go right
+    if user presses space rotate
+}
+
+blockjourney(){
+
+    createBlock
+
+    setInterval(updateIsActive,100ms); //this will keep updating if the block is active
+    setInterval( checkAndMoveDown, 1 second); //this will keep checking if the block is active and then move down every second
+    
+    boolean eventListenerAdded=false;
+    while block.isActive{
+        eventListenerAdded=true;
+        document.addEventListener() ("keypress",keyBoard(block))
+    }
+    if(eventListenerAdded) document.removeEventListner()
+}
+
+while(game continues){
+    blockJourney();
+}
+*/
+
