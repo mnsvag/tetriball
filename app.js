@@ -4,9 +4,6 @@ const downButton  =  document.getElementById("downButton")
 const leftButton  =  document.getElementById("leftButton")
 const rightButton  =  document.getElementById("rightButton")
 var newBlockFlag=true
-// allDivs[144].style.backgroundColor = "red";
-// allDivs[104].style.backgroundColor = "red";
-//console.log(allDivs[100].style.getBackgroundColor)
 
 //map for roatation
 const rotateMap = new Map();
@@ -95,7 +92,7 @@ class Block {
         let myLeftMostCol;
         for(let col=0;col<=2;col++){
             let found=false;
-            for(let row=0;row<=3;row++){
+            for(let row=0;row<3;row++){
                 if(this.blockArray.includes(matrix[row][col])){
                     found=true;
                     break;
@@ -239,8 +236,7 @@ function constructBlock() {
     //center = Math.floor(Math.random()*8 + 1)
     center=17
     type = Math.floor(Math.random()*7)
-    color = "red"
-    let newBlock = new Block(center, type,color)
+    let newBlock = new Block(center, type)
     newBlock.blockArray.forEach(element => {
         allDivs[center+element].classList.add("block");
     });
@@ -248,7 +244,25 @@ function constructBlock() {
     return newBlock;
 }
 
-//onLoad 
+//onLoad
+
+function keyBoard(event) {
+    const keyName = event.key;
+    if(keyName==' '){
+        //user pressed spacebar
+        block.rotate();
+    }
+    else if(keyName == 'ArrowLeft'){
+        block.moveLeft();
+    }
+    else if(keyName == 'ArrowRight'){
+        block.moveRight();
+    }
+    else if(keyName == 'ArrowDown'){
+        block.moveDown();
+    }
+    //alert(keyName)
+}
 
 var block;
 
@@ -268,22 +282,11 @@ function blockJourney() {
     //block.intervalOfIsActive   = setInterval(function() {block.move}, 10);
     block.intervalOfMovingDown = setInterval(function() {block.moveDown()}, 1000);
 
-    document.addEventListener('keydown', (event) => {
-        
-        const keyName = event.key;
-        if(keyName==' '){
-            //user pressed spacebar
-            block.rotate();
-        }
-        else if(keyName == 'ArrowLeft'){
-            block.moveLeft();
-        }
-        else if(keyName == 'ArrowRight'){
-            block.moveRight();
-        }
-        
-        
-    });
+    document.addEventListener('keydown', keyBoard);
+ 
+//    while(!newBlockFlag) {console.log("stuck")}
+
+//     document.removeEventListener('keydown', keyBoard)
 }
 
 //blockJourney();
