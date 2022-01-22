@@ -216,6 +216,14 @@ class Block {
     }
 
     rotate() {
+
+        for (var i=0; i<this.blockArray.length; i++) {
+            let rotatedElement = this.center + rotateMap.get(this.blockArray[i]);
+            if( (isPartOfBorder(rotatedElement) || isFilled(rotatedElement)) 
+              && !this.blockArray.includes(rotateMap.get(this.blockArray[i])))
+                return
+        }
+
        this.blockArray.forEach(ele => {
            allDivs[this.center+ele].classList.remove("block")
        })
