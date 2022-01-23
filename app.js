@@ -41,15 +41,15 @@ function isFilled(index){
     else return false;
 }
 
-function removeCurrentPosition(blockArray) {
-    blockArray.forEach(ele => {
-        allDivs[this.center+ele].classList.remove("moving")
+function removeCurrentPosition(block) {
+    block.blockArray.forEach(ele => {
+        allDivs[block.center+ele].classList.remove("moving")
     })
 }
 
-function addNewPosition(blockArray) {
-    blockArray.forEach(ele => {
-        allDivs[this.center+ele].classList.add("moving")
+function addNewPosition(block) {
+    block.blockArray.forEach(ele => {
+        allDivs[block.center+ele].classList.add("moving")
     })
 }
 
@@ -125,10 +125,9 @@ class Block {
             if(isPartOfBorder(leftToLeftMostCol) || isFilled(leftToLeftMostCol)) return;
         }
 
-        removeCurrentPosition(this.blockArray)
+        removeCurrentPosition(this)
         this.center -= 1;
-        addNewPosition(this.blockArray)
-
+        addNewPosition(this)
     }
 
     moveRight() {
@@ -155,9 +154,11 @@ class Block {
             if(isPartOfBorder(rightToRightMostCol) || isFilled(rightToRightMostCol)) return;
         }
 
-        removeCurrentPosition(this.blockArray)
+
+        removeCurrentPosition(this)
         this.center += 1;   
-        addNewPosition(this.blockArray)
+        addNewPosition(this)
+
     }
 
     moveDown() {
@@ -194,10 +195,9 @@ class Block {
             }
         }
 
-        removeCurrentPosition(this.blockArray)
+        removeCurrentPosition(this)
         this.center += 12;
-        addNewPosition(this.blockArray)
-
+        addNewPosition(this)
     }
 
     rotate() {
@@ -209,12 +209,11 @@ class Block {
                 return
         }
 
-        removeCurrentPosition(this.blockArray)
+        removeCurrentPosition(this)
         this.blockArray = this.blockArray.map(ele =>{
             return rotateMap.get(ele);
         })
-        addNewPosition(this.blockArray)
-        
+        addNewPosition(this)
     }
 }
 
