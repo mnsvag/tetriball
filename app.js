@@ -34,10 +34,23 @@ function isPartOfBorder(index){
     if(allDivs[index].classList.contains('border')) {return true;}
     else return false;
 }
+
 function isFilled(index){
     //return false;
     if(allDivs[index].classList.contains("block")) return true;
     else return false;
+}
+
+function removeCurrentPosition(blockArray) {
+    blockArray.forEach(ele => {
+        allDivs[this.center+ele].classList.remove("moving")
+    })
+}
+
+function addNewPosition(blockArray) {
+    blockArray.forEach(ele => {
+        allDivs[this.center+ele].classList.add("moving")
+    })
 }
 
 class Block {
@@ -103,8 +116,6 @@ class Block {
                 break;
             }
         }
-        //console.log(`my center is ${this.center}`);
-        //console.log(`my leftmost col is ${myLeftMostCol}`);
         
         //if leftmost col is border or has some filled div dont move, else move
         for(let row=0; row <= 2 ; row++){
@@ -114,18 +125,10 @@ class Block {
             if(isPartOfBorder(leftToLeftMostCol) || isFilled(leftToLeftMostCol)) return;
         }
 
-
-        this.blockArray.forEach(ele => {
-            allDivs[this.center+ele].classList.remove("block")
-        })
-
-        console.log(this.center, this.type)
+        removeCurrentPosition(this.blockArray)
         this.center -= 1;
-        console.log(this.center, this.type)
+        addNewPosition(this.blockArray)
 
-        this.blockArray.forEach(ele => {
-            allDivs[this.center+ele].classList.add("block")
-        })
     }
 
     moveRight() {
@@ -143,8 +146,6 @@ class Block {
                 break;
             }
         }
-        //console.log(`my center is ${this.center}`);
-        //console.log(`my leftmost col is ${myLeftMostCol}`);
         
         //if leftmost col is border or has some filled div dont move, else move
         for(let row=0; row <= 2 ; row++){
@@ -154,20 +155,9 @@ class Block {
             if(isPartOfBorder(rightToRightMostCol) || isFilled(rightToRightMostCol)) return;
         }
 
-
-        this.blockArray.forEach(ele => {
-            allDivs[this.center+ele].classList.remove("block")
-        })
-
-        console.log(this.center, this.type)
-        this.center += 1;
-        console.log(this.center, this.type)
-        
-
-        this.blockArray.forEach(ele => {
-            allDivs[this.center+ele].classList.add("block")
-        })
-
+        removeCurrentPosition(this.blockArray)
+        this.center += 1;   
+        addNewPosition(this.blockArray)
     }
 
     moveDown() {
@@ -186,8 +176,6 @@ class Block {
                 break;
             }
         }
-        //console.log(`my center is ${this.center}`);
-        //console.log(`my leftmost col is ${myLeftMostCol}`);
         
         //if leftmost col is border or has some filled div dont move, else move
         for(let col=0; col <= 2 ; col++){
@@ -196,22 +184,19 @@ class Block {
             let downToDownMostCol = this.center + index + 12;
             if(isPartOfBorder(downToDownMostCol) || isFilled(downToDownMostCol)) {
                 newBlockFlag=true
+                this.blockArray.forEach(ele => {
+                    allDivs[this.center+ele].classList.remove("moving")
+                    allDivs[this.center+ele].classList.add("block")
+                })
                 clearInterval(this.intervalOfMovingDown)
+                document.removeEventListener('keydown', keyBoard)
                 return
             }
         }
 
-        this.blockArray.forEach(ele => {
-            allDivs[this.center+ele].classList.remove("block")
-        })
-
+        removeCurrentPosition(this.blockArray)
         this.center += 12;
-        
-
-        this.blockArray.forEach(ele => {
-            allDivs[this.center+ele].classList.add("block")
-        })
-
+        addNewPosition(this.blockArray)
 
     }
 
@@ -224,19 +209,12 @@ class Block {
                 return
         }
 
-       this.blockArray.forEach(ele => {
-           allDivs[this.center+ele].classList.remove("block")
-       })
-
+        removeCurrentPosition(this.blockArray)
         this.blockArray = this.blockArray.map(ele =>{
             return rotateMap.get(ele);
         })
-
-        this.blockArray.forEach(ele => {
-            allDivs[this.center+ele].classList.add("block")
-        })
-
-
+        addNewPosition(this.blockArray)
+        
     }
 }
 
@@ -246,7 +224,7 @@ function constructBlock() {
     type = Math.floor(Math.random()*7)
     let newBlock = new Block(center, type)
     newBlock.blockArray.forEach(element => {
-        allDivs[center+element].classList.add("block");
+        allDivs[center+element].classList.add("moving");
     });
 
     return newBlock;
@@ -276,13 +254,13 @@ var block;
 
 function blockJourney() {
 
-    rotateButton.addEventListener("click", ()=>{
-        block.rotate();
-    });
+    // rotateButton.addEventListener("click", ()=>{
+    //     block.rotate();
+    // });
 
-    downButton.addEventListener("click", ()=>{
-         block.moveDown();
-     });
+    // downButton.addEventListener("click", ()=>{
+    //      block.moveDown();
+    //  });
 
     //1. bring new block
     block = constructBlock()
@@ -299,15 +277,32 @@ function blockJourney() {
 
 //blockJourney();
 
-setInterval(()=> {
-    console.log("checking")
-    if(newBlockFlag) {
+function checkGameOver() {
+    for(var i=14; i<24; ++i) {
+        if(isFilled(i)) {
+            console.log("its weird")
+            return true
+        }
+    }
+    return false
+}
+
+gameInterval =  setInterval(()=> {
+    if(newBlockFlag && !checkGameOver()) {
         newBlockFlag=false
         blockJourney()
+    }
+    if(checkGameOver()) {
+        clearInterval(gameInterval)
     }
 }, 1000)
 
 
+
+// if (checkGameOver()) {
+//     console.log("huh")
+//     clearInterval(gameInterval)
+// }
 /*
 
 Code/game structure
