@@ -64,66 +64,45 @@ class Block {
         //this.intervalOfIsActive =  null;
     }
 
-    // updateIsActive(){
-    //     console.log("i am in update is active")
-    //     console.log(this)
-    //     console.log(this.blockArray)
-
-    //     checks if bottom is touching some div, if yes, updates isActive, else clear interval for checking UpdateIsActive
-       
-    //     this.blockArray.forEach( ele => {
-    //         if(allDivs[this.center+ele + 10].style.backgroundColor != "white");
-    //            // this.isActive = false;
-    //     })
-
-    //     bottomMost.forEach(ele => {
-            
-    //         if(this.blockArray.includes(ele) && 
-    //             ((allDivs[this.center+ele+12].classList.contains("border")) ||
-    //                  allDivs[this.center+ele+10].style.backgroundColor=="red")) {
-    //             console.log("check", ele)
-    //             this.isActive=false;
-    //         }
-    //     })
-
-    //     if(this.isActive==false){
-    //         clearInterval(this.intervalOfIsActive);
-    //     }
-    // }
-
-    // checkAndMoveDown(){
-    //     //if isActive is true, go down else clear Interval for going down
-    //     if(this.isActive==true){
-    //         this.moveDown();
-    //     }
-    //     else
-    //         clearInterval(this.intervalOfMovingDown);
-
-    // }
-
     moveLeft() {
-        let myLeftMostCol;
-        for(let col=0;col<=2;col++){
-            let found=false;
-            for(let row=0;row<3;row++){
-                if(this.blockArray.includes(matrix[row][col])){
-                    found=true;
-                    break;
+        // let myLeftMostCols;
+        // for(let col=0;col<=2;col++){
+        //     let found=false;
+        //     for(let row=0;row<3;row++){
+        //         if(this.blockArray.includes(matrix[row][col])){
+        //             found=true;
+        //             break;
+        //         }
+        //     }
+        //     if(found){
+        //         myLeftMostCol=col;
+        //         break;
+        //     }
+        // }
+        
+        // //if leftmost col is border or has some filled div dont move, else move
+        // for(let row=0; row <= 2 ; row++){
+        //     let index = matrix[row][myLeftMostCol];
+        //     if(!this.blockArray.includes(index)) continue
+        //     let leftToLeftMostCol = this.center + index - 1;
+        //     if(isPartOfBorder(leftToLeftMostCol) || isFilled(leftToLeftMostCol)) return;
+        // }
+
+        const leftBorder = [];
+        for(var row=0; row<3; ++row) {
+            for(var col=0; col<3; ++col) {
+                if(this.blockArray.includes(matrix[row][col])) {
+                    leftBorder.push(matrix[row][col])
+                    break
                 }
             }
-            if(found){
-                myLeftMostCol=col;
-                break;
-            }
         }
-        
-        //if leftmost col is border or has some filled div dont move, else move
-        for(let row=0; row <= 2 ; row++){
-            let index = matrix[row][myLeftMostCol];
-            if(!this.blockArray.includes(index)) continue
-            let leftToLeftMostCol = this.center + index - 1;
-            if(isPartOfBorder(leftToLeftMostCol) || isFilled(leftToLeftMostCol)) return;
+
+        for(var i=0; i<leftBorder.length; ++i) {
+            let leftIndex = leftBorder[i]+this.center-1;
+            if(isPartOfBorder(leftIndex) || isFilled(leftIndex)) return;
         }
+
 
         removeCurrentPosition(this)
         this.center -= 1;
@@ -131,27 +110,42 @@ class Block {
     }
 
     moveRight() {
-        let myRightMostCol;
-        for(let col=2;col >= 0;col--){
-            let found=false;
-            for(let row=0; row <= 2; row++){
-                if(this.blockArray.includes(matrix[row][col])){
-                    found=true;
-                    break;
+        // let myRightMostCol;
+        // for(let col=2;col >= 0;col--){
+        //     let found=false;
+        //     for(let row=0; row <= 2; row++){
+        //         if(this.blockArray.includes(matrix[row][col])){
+        //             found=true;
+        //             break;
+        //         }
+        //     }
+        //     if(found){
+        //         myRightMostCol=col;
+        //         break;
+        //     }
+        // }
+        
+        // //if leftmost col is border or has some filled div dont move, else move
+        // for(let row=0; row <= 2 ; row++){
+        //     let index = matrix[row][myRightMostCol];
+        //     if(!this.blockArray.includes(index)) continue
+        //     let rightToRightMostCol = this.center + index + 1;
+        //     if(isPartOfBorder(rightToRightMostCol) || isFilled(rightToRightMostCol)) return;
+        // }
+
+        const rightBorder = [];
+        for(var row=0; row<3; ++row) {
+            for(var col=2; col>=0; --col) {
+                if(this.blockArray.includes(matrix[row][col])) {
+                    rightBorder.push(matrix[row][col])
+                    break
                 }
             }
-            if(found){
-                myRightMostCol=col;
-                break;
-            }
         }
-        
-        //if leftmost col is border or has some filled div dont move, else move
-        for(let row=0; row <= 2 ; row++){
-            let index = matrix[row][myRightMostCol];
-            if(!this.blockArray.includes(index)) continue
-            let rightToRightMostCol = this.center + index + 1;
-            if(isPartOfBorder(rightToRightMostCol) || isFilled(rightToRightMostCol)) return;
+
+        for(var i=0; i<rightBorder.length; ++i) {
+            let rightIndex = rightBorder[i]+this.center+1;
+            if(isPartOfBorder(rightIndex) || isFilled(rightIndex)) return;
         }
 
 
@@ -163,27 +157,51 @@ class Block {
 
     moveDown() {
 
-        let myDownMostRow;
-        for(let row=2;row >= 0;row--){
-            let found=false;
-            for(let col=0; col <= 2; col++){
-                if(this.blockArray.includes(matrix[row][col])){
-                    found=true;
-                    break;
+        // let myDownMostRow;
+        // for(let row=2;row >= 0;row--){
+        //     let found=false;
+        //     for(let col=0; col <= 2; col++){
+        //         if(this.blockArray.includes(matrix[row][col])){
+        //             found=true;
+        //             break;
+        //         }
+        //     }
+        //     if(found){
+        //         myDownMostRow=row;
+        //         break;
+        //     }
+        // }
+        
+        // //if leftmost col is border or has some filled div dont move, else move
+        // for(let col=0; col <= 2 ; col++){
+        //     let index = matrix[myDownMostRow][col];
+        //     if(!this.blockArray.includes(index)) continue
+        //     let downToDownMostCol = this.center + index + 12;
+        //     if(isPartOfBorder(downToDownMostCol) || isFilled(downToDownMostCol)) {
+                // newBlockFlag=true
+                // this.blockArray.forEach(ele => {
+                //     allDivs[this.center+ele].classList.remove("moving")
+                //     allDivs[this.center+ele].classList.add("block")
+                // })
+                // clearInterval(this.intervalOfMovingDown)
+                // document.removeEventListener('keydown', keyBoard)
+        //         return
+        //     }
+        // }
+
+        const downBorder = [];
+        for(var col=0; col<3; ++col) {
+            for(var row=2; row>=0; --row) {
+                if(this.blockArray.includes(matrix[row][col])) {
+                    downBorder.push(matrix[row][col])
+                    break
                 }
             }
-            if(found){
-                myDownMostRow=row;
-                break;
-            }
         }
-        
-        //if leftmost col is border or has some filled div dont move, else move
-        for(let col=0; col <= 2 ; col++){
-            let index = matrix[myDownMostRow][col];
-            if(!this.blockArray.includes(index)) continue
-            let downToDownMostCol = this.center + index + 12;
-            if(isPartOfBorder(downToDownMostCol) || isFilled(downToDownMostCol)) {
+
+        for(var i=0; i<downBorder.length; ++i) {
+            let downIndex = downBorder[i]+this.center+12;
+            if(isPartOfBorder(downIndex) || isFilled(downIndex)) {
                 newBlockFlag=true
                 this.blockArray.forEach(ele => {
                     allDivs[this.center+ele].classList.remove("moving")
@@ -191,7 +209,7 @@ class Block {
                 })
                 clearInterval(this.intervalOfMovingDown)
                 document.removeEventListener('keydown', keyBoard)
-                return
+                return;
             }
         }
 
