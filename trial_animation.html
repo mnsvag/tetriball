@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8"/>
+    <title>Canvas tutorial</title>
+    <script>
+       var ball = new Image();
+      function init(){
+      	ball.src = "https://cdn.britannica.com/68/195168-050-BBAE019A/football.jpg"
+        let value = 20;
+        let current_time = Date.now();
+        window.requestAnimationFrame(draw);
+      }
+      let current_y = 10;
+      let current_x = 10;
+      let current_time = Date.now();
+      let speed = 1.75;
+      let angle=30;
+      let theta = angle*(Math.PI/180.0);
+      let cos_theta = Math.cos(theta);
+      let sin_theta = Math.sin(theta)
+      function draw() {
+        
+		    var ctx = document.getElementById('canvas').getContext('2d');
+
+        let cur = Date.now();
+        let delta = cur - current_time;
+        delta/= 25;
+
+        if(speed > 0 && current_y >= 280) speed = -1;
+        if(speed < 0 && current_y <= 0 ) speed = 1;
+
+        current_y  = current_y + delta* speed*sin_theta;
+        current_x  = current_x + delta* speed*cos_theta;
+
+        current_time = cur;     
+        
+        ctx.clearRect(0, 0, 300, 300); // clear canvas  
+        ctx.drawImage(ball, current_x, current_y,30,30);
+        window.requestAnimationFrame(draw);
+
+  
+        
+      }
+    </script>
+    <style>
+      canvas { border: 1px solid black; }
+    </style>
+  </head>
+  <body onload="init();">
+    <canvas id="canvas" width="300" height="300"></canvas>
+  </body>
+</html>
