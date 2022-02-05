@@ -11,14 +11,20 @@
         let current_time = Date.now();
         window.requestAnimationFrame(draw);
       }
-      let current_y = 10;
-      let current_x = 10;
+      let current_y = 20;
+      let current_x = 20;
       let current_time = Date.now();
-      let speed = 1.75;
-      let angle=30;
-      let theta = angle*(Math.PI/180.0);
-      let cos_theta = Math.cos(theta);
-      let sin_theta = Math.sin(theta)
+      let speed =2;
+      let angle=60;
+      let theta,cos_theta, sin_theta;
+      recalculateValues();
+
+      function recalculateValues(){
+        theta = angle*(Math.PI/180.0);
+        cos_theta = Math.cos(theta);
+        sin_theta = Math.sin(theta);
+      }
+      
       function draw() {
         
 		    var ctx = document.getElementById('canvas').getContext('2d');
@@ -27,11 +33,20 @@
         let delta = cur - current_time;
         delta/= 25;
 
-        if(speed > 0 && current_y >= 280) speed = -1;
-        if(speed < 0 && current_y <= 0 ) speed = 1;
+        if(current_y >= 280 || current_y <= 10) angle = 360-angle;
+        if(current_x >= 280 || current_x <= 10) angle = 180-angle;
+
+        if(angle < 0 ) angle += 360;
+        if(angle >= 360) angle -= 360;
+
+        recalculateValues();
+
+
 
         current_y  = current_y + delta* speed*sin_theta;
         current_x  = current_x + delta* speed*cos_theta;
+
+        
 
         current_time = cur;     
         
