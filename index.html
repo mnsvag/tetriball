@@ -5,7 +5,11 @@
         </title>
         <link rel="stylesheet" href="style.css">
     </head>
-    <body>
+    <body onload="init();">
+        <div id="canvas-wrap">
+            <canvas id="canvas" width="360" height="510"></canvas>
+            <!-- <div id="overlay"> -->
+        
         <div class="grid">
             <div class="border"></div>
             <div class="border"></div>
@@ -153,6 +157,8 @@
             <div class="border"></div>
             
         </div>
+    <!-- </div> -->
+</div>
 
         <button id="rotateButton">Rotate</button>
         <button id="downButton">Go Down</button>
