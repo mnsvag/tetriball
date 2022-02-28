@@ -363,15 +363,15 @@ while(game continues){
 
 var ball = new Image();
         
-      document.addEventListener('keydown', keyBoard);
+      document.addEventListener('mousemove', plankMovement);
 
-      let current_y = 20;
-      let current_x = 20;
+      let current_y = 480;
+      let current_x = 30;
       let current_time = Date.now();
       let speed =2.25;
       let angle=60;
       let theta,cos_theta, sin_theta;
-      let plank_start = 20,plank_length=50;
+      let plank_start = 30,plank_length=50;
       recalculateValues();
 
       function init(){
@@ -387,26 +387,19 @@ var ball = new Image();
         sin_theta = Math.sin(theta);
       }
 
-      function keyBoard(event){
-        const keyName = event.key;
-        
-        if(keyName == 'ArrowLeft'){
-          if(plank_start >= 20)  plank_start -= 10;            
-        }
-        else if(keyName == 'ArrowRight'){
-          if(plank_start <= 270) plank_start += 10;
-        }
+      function plankMovement(e){
+        plank_start = e.offsetX;
         
       }
       function isPartOfPlank(x,y){
         
-        if(x >= plank_start && x <= plank_start+plank_length && y>= 260) return true;
+        if(x >= plank_start && x <= plank_start+plank_length && y>= 480) return true;
         else return false;
       }
 
       function positionIsNotValid(x,y){
-        if(x <= 10 || x >= 280) return true;
-        if(y <= 10 || y >= 280) return true;
+        if(x <= 30 || x >= 330) return true;
+        if(y <= 30 || y >= 480) return true;
         return false;
       }
 
@@ -426,8 +419,8 @@ var ball = new Image();
           let changed=false;
 
           if(isPartOfPlank(current_x,current_y))  {angle = 360-angle; changed=true;}
-          if(current_y <= 10) {angle = 360-angle; changed=true;}
-          if(current_x >= 280 || current_x <= 10) {angle = 180-angle; changed= true;}
+          if(current_y <= 30) {angle = 360-angle; changed=true;}
+          if(current_x >= 330 || current_x <= 30) {angle = 180-angle; changed= true;}
 
           //console.log(val);
 
@@ -469,10 +462,10 @@ var ball = new Image();
 
         current_time = cur;     
         
-        ctx.clearRect(0, 0, 300, 300); // clear canvas  
+        ctx.clearRect(0, 0, 360, 510); // clear canvas  
         ctx.drawImage(ball, current_x, current_y,30,30);
 
-        ctx.fillRect(plank_start,280,50,20);
+        ctx.fillRect(plank_start,480,100,20);
         window.requestAnimationFrame(draw);
 
   
