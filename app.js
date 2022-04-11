@@ -232,28 +232,35 @@ gameInterval =  setInterval(()=> {
 //     console.log("huh")
 //     clearInterval(gameInterval)
 // }
-
-
-
-        
-document.addEventListener('mousemove', plankMovement);
-
-//update canvas 30 times in 1s
-const FPS = 50;
-
-let current_y = canvas.height/2;
-let current_x = canvas.width/2;
-let ball_size = 15;
-let speed =10;
-let theta=Math.PI/3;
-let cos_theta, sin_theta;
 let plank_start = 0;
 let plank_length=100;
+let current_y = canvas.height-30;
+let current_x = 50;
+let ball_size = 15;
+let speed = 2;
+let theta=Math.PI/3;
+let cos_theta, sin_theta;
 let ctx = document.getElementById('canvas').getContext('2d');
-calculateAngles();
+const FPS = 50;
+
+document.addEventListener('mousemove', plankMovement);
+
+plankInterval = setInterval(() => {
+    ctx.clearRect(0, 0, 720, 510); // clear canvas
+    ctx.fillStyle = "pink";
+    ctx.fillRect(plank_start, canvas.height-30 , plank_length , 20);
+}, 1000/FPS);
 
 
-setInterval(draw, 1000 / FPS);
+ballInterval = setInterval(() => {
+    calculateAngles();;
+    draw(); 
+    if( current_y >= canvas.height-10) {
+        clearInterval(ballInterval)
+    }
+}, 10);
+
+
 
 function calculateAngles() {
     cos_theta = Math.cos(theta);
@@ -308,11 +315,6 @@ function draw() {
     if(checkForCollision()) {
        updateBallPosition();
     }  
-
-    ctx.clearRect(0, 0, 720, 510); // clear canvas  
-
-    ctx.fillStyle = "yellow";
-    ctx.fillRect(plank_start, canvas.height-30 , plank_length , 20);
     
     ctx.beginPath();
     ctx.arc(current_x, current_y, ball_size, 0, 2*Math.PI);
