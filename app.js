@@ -285,13 +285,13 @@ function checkForCollision() {
         changed=true;
     }
 
-    if (current_y - ball_size/2 <= 0) {
+    if (current_y - ball_size <= 0) {
             theta = 2*Math.PI-theta;
             changed=true;
     }
 
-    if (current_x - ball_size/2 <= 0
-        || current_x + ball_size/2 >= canvas.width) {
+    if (current_x - ball_size <= 0
+        || current_x + ball_size >= canvas.width) {
             theta = Math.PI-theta;
             changed= true;
     }
@@ -311,7 +311,7 @@ function draw() {
 
     ctx.clearRect(0, 0, 720, 510); // clear canvas  
 
-    ctx.fillStyle = "black";
+    ctx.fillStyle = "yellow";
     ctx.fillRect(plank_start, canvas.height-30 , plank_length , 20);
     
     ctx.beginPath();

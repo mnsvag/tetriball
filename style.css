@@ -1,6 +1,6 @@
 .pixel {
-	border-style: solid;
-	border-color: black;
+	/* border-style: solid;
+	border-color: black; */
 }
 
 .border {
@@ -28,6 +28,6 @@
 /* #overlay     { position:absolute; top:0px; left:0px; } */
 #canvas { 
 	border: 1px solid black; 
-	background-color: blueviolet;
+	background-color: black;
 }
 	/* position: absolute; top:0px; left:0px;} */
