@@ -1,8 +1,4 @@
 const allDivs = document.querySelectorAll("div");
-const rotateButton = document.getElementById("rotateButton")
-const downButton  =  document.getElementById("downButton")
-const leftButton  =  document.getElementById("leftButton")
-const rightButton  =  document.getElementById("rightButton")
 var newBlockFlag=true
 
 //map for roatation
@@ -232,35 +228,44 @@ gameInterval =  setInterval(()=> {
 //     console.log("huh")
 //     clearInterval(gameInterval)
 // }
-let plank_start = 0;
+let plank_start = 100;
 let plank_length=100;
-let current_y = canvas.height-30;
-let current_x = 50;
+let current_y = canvas.height-45;
+let current_x = plank_start+plank_length/2;
 let ball_size = 15;
 let speed = 2;
 let theta=Math.PI/3;
 let cos_theta, sin_theta;
 let ctx = document.getElementById('canvas').getContext('2d');
+let gameStarted = false;
 const FPS = 50;
-
-document.addEventListener('mousemove', plankMovement);
 
 plankInterval = setInterval(() => {
     ctx.clearRect(0, 0, 720, 510); // clear canvas
-    ctx.fillStyle = "pink";
+    ctx.fillStyle = "greenyellow";
     ctx.fillRect(plank_start, canvas.height-30 , plank_length , 20);
+    
+    if(!gameStarted)
+        updateInitialBall();
 }, 1000/FPS);
 
 
-ballInterval = setInterval(() => {
-    calculateAngles();;
-    draw(); 
-    if( current_y >= canvas.height-10) {
-        clearInterval(ballInterval)
-    }
-}, 10);
+document.addEventListener('mousemove', plankMovement);
 
+document.onclick =  () => {
+    gameStarted = true;
+    ballInterval = setInterval(() => {
+        calculateAngles();;
+        draw(); 
+        if( current_y >= canvas.height-10) {
+            clearInterval(ballInterval)
+            gameStarted = false;
+        }
+    }, 1);
+}
 
+//   //log.textContent = `Position: (${e.clientX}, ${e.clientY})`;
+//   //alert(log)
 
 function calculateAngles() {
     cos_theta = Math.cos(theta);
@@ -282,6 +287,14 @@ function isPartOfPlank (x,y) {
 function updateBallPosition() {
     current_y  = current_y +  speed*sin_theta;
     current_x  = current_x +  speed*cos_theta;
+}
+
+function drawBall() {
+    ctx.beginPath();
+    ctx.arc(current_x, current_y, ball_size, 0, 2*Math.PI);
+    ctx.fillStyle = "yellow";
+    ctx.fill();
+    ctx.closePath();
 }
 
 function checkForCollision() {
@@ -315,10 +328,13 @@ function draw() {
     if(checkForCollision()) {
        updateBallPosition();
     }  
-    
-    ctx.beginPath();
-    ctx.arc(current_x, current_y, ball_size, 0, 2*Math.PI);
-    ctx.fillStyle = "yellow";
-    ctx.fill();
-    ctx.closePath();
+
+    drawBall()
+}
+
+function updateInitialBall() {
+    current_x = plank_start+plank_length/2;
+    current_y = canvas.height-45;
+
+   drawBall();
 }
