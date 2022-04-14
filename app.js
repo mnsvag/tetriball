@@ -273,7 +273,10 @@ function calculateAngles() {
 }
 
 function plankMovement(e) {
-    plank_start = e.offsetX;
+    if( e.offsetX<canvas.width-100)
+        plank_start =  e.offsetX;
+    else
+        plank_start = canvas.width-100
 }
 
 function isPartOfPlank (x,y) {
