@@ -156,8 +156,8 @@ class Block {
 }
 
 function constructBlock() {
-    //center = Math.floor(Math.random()*8 + 1)
-    center=17
+    //bw 15 to 24 (excluding)
+    center= Math.floor(Math.random()*7) + 16;
     type = Math.floor(Math.random()*7)
     let newBlock = new Block(center, type)
     newBlock.blockArray.forEach(element => {
