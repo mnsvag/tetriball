@@ -156,9 +156,12 @@ class Block {
 }
 
 function constructBlock() {
-    //bw 15 to 24 (excluding)
-    center= Math.floor(Math.random()*7) + 16;
+    //bw 15(excluding) to 24(including)
     type = Math.floor(Math.random()*7)
+    let diff;
+    if(type==6) diff=9;
+    else diff=8;
+    center= Math.floor(Math.random()*diff) + 16;
     let newBlock = new Block(center, type)
     newBlock.blockArray.forEach(element => {
         allDivs[center+element].classList.add("moving");
@@ -257,7 +260,7 @@ document.onclick =  () => {
     ballInterval = setInterval(() => {
         calculateAngles();;
         draw(); 
-        if( current_y >= canvas.height-10) {
+        if( current_y >= canvas.height-20) {
             clearInterval(ballInterval)
             gameStarted = false;
         }
