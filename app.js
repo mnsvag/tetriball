@@ -32,7 +32,6 @@ function isPartOfBorder(index){
 }
 
 function isFilled(index){
-    //return false;
     if(allDivs[index].classList.contains("block")) return true;
     else return false;
 }
@@ -236,7 +235,7 @@ let plank_length=100;
 let current_y = canvas.height-45;
 let current_x = plank_start+plank_length/2;
 let ball_size = 15;
-let speed = 2;
+let speed = 5;
 let theta=Math.PI/3;
 let cos_theta, sin_theta;
 let ctx = document.getElementById('canvas').getContext('2d');
@@ -322,6 +321,11 @@ function checkForCollision() {
             changed= true;
     }
 
+    if(checkCollisionWithBlock()) {
+        theta = 2*Math.PI-theta;
+            changed=true;
+    }
+
     calculateAngles();
 
     return changed;
@@ -343,4 +347,29 @@ function updateInitialBall() {
     current_y = canvas.height-45;
 
    drawBall();
+}
+
+function findBlockDiv() {
+    /*
+        tetris-block -> height = 30px, width = 60px
+        tetris game area -> height = 360px, width = 720px
+        tetris div starts from 2
+    */
+
+    if(current_y>360) return -1;
+
+    // find out the div
+    column = Math.ceil(current_y/30);
+    row = Math.ceil(current_x/60);
+    return 12*(column-1) + row + 2;
+}
+
+function checkCollisionWithBlock() {
+    let blockDiv = findBlockDiv();
+    if(blockDiv==-1) return false;
+    console.log(blockDiv)
+    if(!isFilled(blockDiv))
+        return false;
+    allDivs[blockDiv].classList.remove("block");
+    return true;
 }
