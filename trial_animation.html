@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8"/>
+    <title>Canvas tutorial</title>
+    <script>
+      var ball = new Image();
+        
+      document.addEventListener('keydown', keyBoard);
+
+      let current_y = 20;
+      let current_x = 20;
+      let current_time = Date.now();
+      let speed =2.25;
+      let angle=60;
+      let theta,cos_theta, sin_theta;
+      let plank_start = 20,plank_length=50;
+      recalculateValues();
+
+      function init(){
+          ball.src = "https://cdn.britannica.com/68/195168-050-BBAE019A/football.jpg"
+          let value = 20;
+          let current_time = Date.now();
+          window.requestAnimationFrame(draw);
+        }
+
+      function recalculateValues(){
+        theta = angle*(Math.PI/180.0);
+        cos_theta = Math.cos(theta);
+        sin_theta = Math.sin(theta);
+      }
+
+      function keyBoard(event){
+        const keyName = event.key;
+        
+        if(keyName == 'ArrowLeft'){
+          if(plank_start >= 20)  plank_start -= 10;            
+        }
+        else if(keyName == 'ArrowRight'){
+          if(plank_start <= 270) plank_start += 10;
+        }
+        
+      }
+      function isPartOfPlank(x,y){
+        
+        if(x >= plank_start && x <= plank_start+plank_length && y>= 260) return true;
+        else return false;
+      }
+
+      function positionIsNotValid(x,y){
+        if(x <= 10 || x >= 280) return true;
+        if(y <= 10 || y >= 280) return true;
+        return false;
+      }
+
+      function draw() {
+        
+		    var ctx = document.getElementById('canvas').getContext('2d');
+
+        let cur = Date.now();
+        let delta = cur - current_time;
+        delta/= 25;
+
+
+      
+          current_y  = current_y + delta* speed*sin_theta;
+          current_x  = current_x + delta* speed*cos_theta;
+
+          let changed=false;
+
+          if(isPartOfPlank(current_x,current_y))  {angle = 360-angle; changed=true;}
+          if(current_y <= 10) {angle = 360-angle; changed=true;}
+          if(current_x >= 280 || current_x <= 10) {angle = 180-angle; changed= true;}
+
+          //console.log(val);
+
+          recalculateValues();
+
+          if(changed){
+            current_y  = current_y + delta* speed*sin_theta;
+            current_x  = current_x + delta* speed*cos_theta;
+
+            current_y  = current_y + delta* speed*sin_theta;
+            current_x  = current_x + delta* speed*cos_theta;
+          }
+
+          
+        
+
+        console.log(current_x,current_y);
+
+        // if(val = isPartOfPlank(current_x,current_y)) angle = 360-angle;
+        // //if(current_y >= 300) current_y = 500;
+
+        // console.log(val);
+
+        // //if(current_y >= 280 || current_y <= 10) angle = 360-angle;
+        // if( current_y <= 10) angle = 360-angle;
+        // if(current_x >= 280 || current_x <= 10) angle = 180-angle;
+
+        // if(angle < 0 ) angle += 360;
+        // if(angle >= 360) angle -= 360;
+
+        // recalculateValues();
+
+        // current_y  = current_y + delta* speed*sin_theta;
+        // current_x  = current_x + delta* speed*cos_theta;
+
+        
+
+        
+
+        current_time = cur;     
+        
+        ctx.clearRect(0, 0, 300, 300); // clear canvas  
+        ctx.drawImage(ball, current_x, current_y,30,30);
+
+        ctx.fillRect(plank_start,280,50,20);
+        window.requestAnimationFrame(draw);
+
+  
+        
+      }
+    </script>
+    <style>
+      canvas { border: 1px solid black; }
+    </style>
+  </head>
+  <body onload="init();">
+    <canvas id="canvas" width="300" height="300"></canvas>
+  </body>
+</html>

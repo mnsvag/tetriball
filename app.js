@@ -1,8 +1,4 @@
 const allDivs = document.querySelectorAll("div");
-const rotateButton = document.getElementById("rotateButton")
-const downButton  =  document.getElementById("downButton")
-const leftButton  =  document.getElementById("leftButton")
-const rightButton  =  document.getElementById("rightButton")
 var newBlockFlag=true
 
 //map for roatation
@@ -36,7 +32,6 @@ function isPartOfBorder(index){
 }
 
 function isFilled(index){
-    //return false;
     if(allDivs[index].classList.contains("block")) return true;
     else return false;
 }
@@ -65,28 +60,6 @@ class Block {
     }
 
     moveLeft() {
-        // let myLeftMostCols;
-        // for(let col=0;col<=2;col++){
-        //     let found=false;
-        //     for(let row=0;row<3;row++){
-        //         if(this.blockArray.includes(matrix[row][col])){
-        //             found=true;
-        //             break;
-        //         }
-        //     }
-        //     if(found){
-        //         myLeftMostCol=col;
-        //         break;
-        //     }
-        // }
-        
-        // //if leftmost col is border or has some filled div dont move, else move
-        // for(let row=0; row <= 2 ; row++){
-        //     let index = matrix[row][myLeftMostCol];
-        //     if(!this.blockArray.includes(index)) continue
-        //     let leftToLeftMostCol = this.center + index - 1;
-        //     if(isPartOfBorder(leftToLeftMostCol) || isFilled(leftToLeftMostCol)) return;
-        // }
 
         const leftBorder = [];
         for(var row=0; row<3; ++row) {
@@ -110,28 +83,6 @@ class Block {
     }
 
     moveRight() {
-        // let myRightMostCol;
-        // for(let col=2;col >= 0;col--){
-        //     let found=false;
-        //     for(let row=0; row <= 2; row++){
-        //         if(this.blockArray.includes(matrix[row][col])){
-        //             found=true;
-        //             break;
-        //         }
-        //     }
-        //     if(found){
-        //         myRightMostCol=col;
-        //         break;
-        //     }
-        // }
-        
-        // //if leftmost col is border or has some filled div dont move, else move
-        // for(let row=0; row <= 2 ; row++){
-        //     let index = matrix[row][myRightMostCol];
-        //     if(!this.blockArray.includes(index)) continue
-        //     let rightToRightMostCol = this.center + index + 1;
-        //     if(isPartOfBorder(rightToRightMostCol) || isFilled(rightToRightMostCol)) return;
-        // }
 
         const rightBorder = [];
         for(var row=0; row<3; ++row) {
@@ -156,38 +107,6 @@ class Block {
     }
 
     moveDown() {
-
-        // let myDownMostRow;
-        // for(let row=2;row >= 0;row--){
-        //     let found=false;
-        //     for(let col=0; col <= 2; col++){
-        //         if(this.blockArray.includes(matrix[row][col])){
-        //             found=true;
-        //             break;
-        //         }
-        //     }
-        //     if(found){
-        //         myDownMostRow=row;
-        //         break;
-        //     }
-        // }
-        
-        // //if leftmost col is border or has some filled div dont move, else move
-        // for(let col=0; col <= 2 ; col++){
-        //     let index = matrix[myDownMostRow][col];
-        //     if(!this.blockArray.includes(index)) continue
-        //     let downToDownMostCol = this.center + index + 12;
-        //     if(isPartOfBorder(downToDownMostCol) || isFilled(downToDownMostCol)) {
-                // newBlockFlag=true
-                // this.blockArray.forEach(ele => {
-                //     allDivs[this.center+ele].classList.remove("moving")
-                //     allDivs[this.center+ele].classList.add("block")
-                // })
-                // clearInterval(this.intervalOfMovingDown)
-                // document.removeEventListener('keydown', keyBoard)
-        //         return
-        //     }
-        // }
 
         const downBorder = [];
         for(var col=0; col<3; ++col) {
@@ -236,9 +155,12 @@ class Block {
 }
 
 function constructBlock() {
-    //center = Math.floor(Math.random()*8 + 1)
-    center=17
+    //bw 15(excluding) to 24(including)
     type = Math.floor(Math.random()*7)
+    let diff;
+    if(type==6) diff=9;
+    else diff=8;
+    center= Math.floor(Math.random()*diff) + 16;
     let newBlock = new Block(center, type)
     newBlock.blockArray.forEach(element => {
         allDivs[center+element].classList.add("moving");
@@ -271,14 +193,6 @@ var block;
 
 function blockJourney() {
 
-    // rotateButton.addEventListener("click", ()=>{
-    //     block.rotate();
-    // });
-
-    // downButton.addEventListener("click", ()=>{
-    //      block.moveDown();
-    //  });
-
     //1. bring new block
     block = constructBlock()
 
@@ -286,10 +200,6 @@ function blockJourney() {
     block.intervalOfMovingDown = setInterval(function() {block.moveDown()}, 1000);
 
     document.addEventListener('keydown', keyBoard);
- 
-//    while(!newBlockFlag) {console.log("stuck")}
-
-//     document.removeEventListener('keydown', keyBoard)
 }
 
 //blockJourney();
@@ -320,44 +230,146 @@ gameInterval =  setInterval(()=> {
 //     console.log("huh")
 //     clearInterval(gameInterval)
 // }
-/*
+let plank_start = 100;
+let plank_length=100;
+let current_y = canvas.height-45;
+let current_x = plank_start+plank_length/2;
+let ball_size = 15;
+let speed = 5;
+let theta=Math.PI/3;
+let cos_theta, sin_theta;
+let ctx = document.getElementById('canvas').getContext('2d');
+let gameStarted = false;
+const FPS = 50;
 
-Code/game structure
-checkAndMoveDown(){
-     if(block is currently active && can go down){
-         moveDown();
-     }
-     else clearInterval(checkAndMoveDown)
-}
-
-updateIsActive(){
-    checkIf touching down
-    else
-        clearInterval(updateIsActive)
-}
-
-function keyBoard(block){
-    if user presses left go left ==> block.moveLeft()
-    if user presses right go right
-    if user presses space rotate
-}
-
-blockjourney(){
-
-    createBlock
-
-    setInterval(updateIsActive,100ms); //this will keep updating if the block is active
-    setInterval( checkAndMoveDown, 1 second); //this will keep checking if the block is active and then move down every second
+plankInterval = setInterval(() => {
+    ctx.clearRect(0, 0, 720, 510); // clear canvas
+    ctx.fillStyle = "greenyellow";
+    ctx.fillRect(plank_start, canvas.height-30 , plank_length , 20);
     
-    document.addEventListener() ("keypress",keyBoard(block))
-    while block.isActive{
-       ;
+    if(!gameStarted)
+        updateInitialBall();
+}, 1000/FPS);
+
+
+document.addEventListener('mousemove', plankMovement);
+
+document.onclick =  () => {
+    gameStarted = true;
+    ballInterval = setInterval(() => {
+        calculateAngles();;
+        draw(); 
+        if( current_y >= canvas.height-20) {
+            clearInterval(ballInterval)
+            gameStarted = false;
+        }
+    }, 1);
+}
+
+//   //log.textContent = `Position: (${e.clientX}, ${e.clientY})`;
+//   //alert(log)
+
+function calculateAngles() {
+    cos_theta = Math.cos(theta);
+    sin_theta = Math.sin(theta);
+}
+
+function plankMovement(e) {
+    if( e.offsetX<canvas.width-100)
+        plank_start =  e.offsetX;
+    else
+        plank_start = canvas.width-100
+}
+
+function isPartOfPlank (x,y) {
+    if(x  >= plank_start 
+        && x <= plank_start+plank_length 
+        && y >= canvas.height-30) 
+            return true;
+    else return false;
+}
+
+function updateBallPosition() {
+    current_y  = current_y +  speed*sin_theta;
+    current_x  = current_x +  speed*cos_theta;
+}
+
+function drawBall() {
+    ctx.beginPath();
+    ctx.arc(current_x, current_y, ball_size, 0, 2*Math.PI);
+    ctx.fillStyle = "yellow";
+    ctx.fill();
+    ctx.closePath();
+}
+
+function checkForCollision() {
+    let changed=false;
+
+    if(isPartOfPlank(current_x,current_y)) {
+        theta = 2*Math.PI-theta;
+        changed=true;
     }
-    document.removeEventListner()
+
+    if (current_y - ball_size <= 0) {
+            theta = 2*Math.PI-theta;
+            changed=true;
+    }
+
+    if (current_x - ball_size <= 0
+        || current_x + ball_size >= canvas.width) {
+            theta = Math.PI-theta;
+            changed= true;
+    }
+
+    if(checkCollisionWithBlock()) {
+        theta = 2*Math.PI-theta;
+            changed=true;
+    }
+
+    calculateAngles();
+
+    return changed;
 }
 
-while(game continues){
-    blockJourney();
-}
-*/
+function draw() {
 
+    updateBallPosition();
+
+    if(checkForCollision()) {
+       updateBallPosition();
+    }  
+
+    drawBall()
+}
+
+function updateInitialBall() {
+    current_x = plank_start+plank_length/2;
+    current_y = canvas.height-45;
+
+   drawBall();
+}
+
+function findBlockDiv() {
+    /*
+        tetris-block -> height = 30px, width = 60px
+        tetris game area -> height = 360px, width = 720px
+        tetris div starts from 2
+    */
+
+    if(current_y>360) return -1;
+
+    // find out the div
+    column = Math.ceil(current_y/30);
+    row = Math.ceil(current_x/60);
+    return 12*(column-1) + row + 2;
+}
+
+function checkCollisionWithBlock() {
+    let blockDiv = findBlockDiv();
+    if(blockDiv==-1) return false;
+    console.log(blockDiv)
+    if(!isFilled(blockDiv))
+        return false;
+    allDivs[blockDiv].classList.remove("block");
+    return true;
+}
